@@ -3,7 +3,7 @@
 <h1>User Criteria: </h1>
 
 <h2> Time </h2>
-<p>Distance Matrix API (Google):  </p> 
+<p>Distance Matrix API (Google): https://developers.google.com/maps/documentation/javascript/distancematrix </p> 
 <h2> Cost: </h2>
 <p>Capitol Bikeshare: http://opendata.dc.gov/datasets/capital-bike-share-locations <br>
 </p>

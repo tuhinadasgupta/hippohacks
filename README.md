@@ -2,9 +2,9 @@
 
 <h1>User Criteria: </h1>
 
-<h2> Time </h2>
-<p>Distance Matrix API (Google): https://developers.google.com/maps/documentation/javascript/distancematrix </p> 
-<h2> Cost: </h2>
+<h2> Radius </h2>
+<p>Places API (Google): https://developers.google.com/places/web-service/intro </p> 
+<h2> Transportation: </h2>
 <p>Capitol Bikeshare: http://opendata.dc.gov/datasets/capital-bike-share-locations <br>
 </p>
 <h2> Personal Options: </h2>
@@ -12,9 +12,9 @@
 Museums <br>
 Monuments <br>
 Shopping <br>
+Places API (Google): https://developers.google.com/places/web-service/intro
 </p>
-<h2> Complexity: </h2>
-<p> Number of Steps </p>
+
 
 <h1>Pages: </h1>
-<p>Route Map, Route Instructions, Weather, Analytics, About Us </p>
+<p>Ratings, Start Map, End Map </p>

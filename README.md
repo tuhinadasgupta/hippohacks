@@ -5,7 +5,7 @@
 <h2> Time </h2>
 <p>Distance Matrix API (Google):  </p> 
 <h2> Cost: </h2>
-<p>Capitol Bikeshare <br>
+<p>Capitol Bikeshare: https://gbfs.capitalbikeshare.com/gbfs/gbfs.json <br>
 </p>
 <h2> Personal Options: </h2>
 <p>Food <br>

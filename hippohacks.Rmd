@@ -2,7 +2,7 @@
 title: "hippohacks RMarkdown"
 output: html_notebook
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 ## Introduction
 
@@ -13,7 +13,6 @@ library(jsonlite)
 library(broom)
 library(dplyr)
 ```
-
 
 ```{r}
 #define the function
@@ -48,15 +47,85 @@ ggplot() +
 ```{r}
 library(plotly)
 Sys.setenv('MAPBOX_TOKEN' = 'pk.eyJ1IjoibWFzdGVyYmluZ28xIiwiYSI6ImNqdDluOHo2aDAxenQ0OW51dmdkOGIyaDkifQ.KMv1Wkds1VtmtzOOmMWuiw')
-plot_mapbox(mode = "scattermapbox", marker = list(symbol = "bicycle", size = 10, col = "blue")) %>%
+plot_mapbox(mode = "scattermapbox", marker = list(symbol = "bicycle", size = 9.5, color = "blue")) %>%
   add_markers(data = station_BigData, x = ~ lon, y = ~ lat,
               hoverinfo = "text",
             text = ~paste('Name: ', name,
                           '\n Available Bikes: ', num_bikes_available,
                           '\n Available Docks: ', num_docks_available)) %>%
-  layout(mapbox = list(zoom = 10.5,
+  layout(mapbox = list(zoom = 11,
                        center = list(lat = ~median(station_BigData$lat),
                                      lon = ~median(station_BigData$lon)),
-                       style = "outdoors"))
+                       style = "dark"))
+#second version
+plot_mapbox(mode = "scattermapbox", hoverlabel = list(
+  bgcolor = "green", bordercolor = "white"
+)) %>%
+  add_markers(data = station_BigData, x = ~ lon, y = ~ lat, fill = "blue",
+              hoverinfo = "text",
+            text = ~paste('Name: ', name,
+                          '\n Available Bikes: ', num_bikes_available,
+                          '\n Available Docks: ', num_docks_available)) %>%
+  layout(mapbox = list(zoom = 11,
+                       center = list(lat = ~median(station_BigData$lat),
+                                     lon = ~median(station_BigData$lon)),
+                       style = "streets"))
+```
+
+## Goal 2
+
+Lets try to find how to geocode addreses in R
+First attempt will be with google maps
+
+```{r}
+library(ggmap)
+homeLoc <- geocode("3230 7th st NE, washington dc", output = c("latlon"), source = "google")
+destLoc <- geocode("1100 Pensylvania Ave NW, washington dc", output = c("latlon"), source = "google")
+```
+
+## Problem 3 
+
+Find the closest bike closest:
+```{r}
+#grab some nifty stack overflow 
+library(rgeos) 
+set1sp <- SpatialPoints(homeLoc)
+set2sp <- SpatialPoints(destLoc)
+homeLoc$nearest_in_set2 <- apply(gDistance(set1sp, set2sp, byid=TRUE), 1, which.min)
+station_sub <- station_BigData[, 6:5]
+station_subSP <- SpatialPoints(station_sub)
+blep <- gDistance(set1sp, station_subSP, byid=TRUE)
+n <- station_BigData %>%
+  cbind(blep)
+n %>%
+  arrange(`1`) %>%
+  head(1L) %>%
+  select(name, lat, lon)
+```
+
+Lets turn this into a usuable function for our backend server:
+```{r define get_closests}
+get_closest <- function(location){
+  library(rgeos) #load packages
+  location <- geocode(location, output = c("latlon"), source = "google")
+  set1sp <- SpatialPoints(location) #define location points
+  station_sub <- station_BigData[, 6:5]#subset for lon lat
+  station_subSP <- SpatialPoints(station_sub)
+  blep <- gDistance(set1sp)
+  n <- station_BigData %>% #cbind back into larger data frame
+    cbind(blep)
+  dock <- n %>%
+    arrange(`1`) %>%
+    head(1L) %>%
+    select(name, lat, lon)
+  return(dock)
+}
+```
+```{r}
+location <-geocode("460 taylor st NE, washington dc", output = "latlon", source = "google")
+ set1sp <- SpatialPoints(location) #define location points
+ station_sub <- station_BigData[, 6:5]#subset for lon lat
+ station_subSP <- SpatialPoints(station_sub)
+ blep <- gDistance(set1sp)
 ```
 

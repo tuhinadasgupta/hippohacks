@@ -6,9 +6,11 @@
 <p>Distance Matrix API (Google) </p> 
 <h2> Cost: </h2>
 <p>Lime <br>
-Capital Bikeshare <br>
+Lyft <br>
 Jump <br>
 Spin <br>
+Skip <br>
+Bird <br>
 </p>
 <h2> Personal Options: </h2>
 <p>Food <br>

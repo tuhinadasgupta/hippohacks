@@ -3,6 +3,7 @@
 <h1>User Criteria: </h1>
 
 <h2> Time </h2>
+<p>Distance Matrix API (Google) </p> 
 <h2> Cost: </h2>
 <p>Lime <br>
 Capital Bikeshare <br>

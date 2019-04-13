@@ -3,14 +3,9 @@
 <h1>User Criteria: </h1>
 
 <h2> Time </h2>
-<p>Distance Matrix API (Google) </p> 
+<p>Distance Matrix API (Google):  </p> 
 <h2> Cost: </h2>
-<p>Lime <br>
-Lyft <br>
-Jump <br>
-Spin <br>
-Skip <br>
-Bird <br>
+<p>Capitol Bikeshare <br>
 </p>
 <h2> Personal Options: </h2>
 <p>Food <br>

@@ -2,6 +2,7 @@
 
 <h1>User Criteria: </h1>
 
+<h2> Start Address </h2>
 <h2> Radius </h2>
 <p>Places API (Google): https://developers.google.com/places/web-service/intro </p> 
 <h2> Transportation: </h2>

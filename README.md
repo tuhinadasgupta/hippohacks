@@ -1,4 +1,4 @@
-# hippohacks
+# Tour de DC
 
 <h1>User Criteria: </h1>
 

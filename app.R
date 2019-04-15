@@ -5,8 +5,6 @@
 # Find out more about building applications with Shiny here:
 #
 #    http://shiny.rstudio.com/
-#
-
 library(shiny)
 library(httr)
 library(jsonlite)
@@ -15,6 +13,8 @@ library(ggmap)
 library(shinyjs)
 library(ggplot2)
 library(plotly)
+library(sp)
+library(rgeos)
 #register google API key
 register_google(key="AIzaSyA-YsYmgsuegnG9ZWonhssUq-aQdBr8MHo")
 #MAPBOX token
@@ -25,11 +25,11 @@ get_poi <- function(location,radius,type,return_n) {
   key <- "AIzaSyA-YsYmgsuegnG9ZWonhssUq-aQdBr8MHo"
   base <- "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="
   POI <- GET(paste(base,location,"&radius=",radius,"&type=",type,"&key=",key,sep = ""))
-  
+  place <- NULL
   at <- rawToChar(POI$content)
   att <- fromJSON(at)
   length_of_list <- length(att[["results"]])
-  if( length_of_list==0)
+  if(length_of_list == 0)
     list_of_names="None"
   else{
     list_of_names=list()
@@ -62,8 +62,6 @@ get_poi_rating <- function(location,radius,type,return_n) {
     return(list_of_ratings)
   }
 }
-
-
 get_poi_loc <- function(location,radius,type,return_n) {
   #Google API call 
   key <- "AIzaSyA-YsYmgsuegnG9ZWonhssUq-aQdBr8MHo"
@@ -91,9 +89,20 @@ get_poi_loc <- function(location,radius,type,return_n) {
     return(list(list_of_lat,list_of_lng))
   }
 }
-
+#used to pull capital bikeshare data
+get_Capital <- function(url) {
+  doot <- fromJSON(url)
+  doot2 <- doot$data
+  doot3 <- do.call(what = "rbind",
+                   args = lapply(doot2, as.data.frame))
+  return(doot3)
+}
+station_DataDF <- get_Capital("https://gbfs.capitalbikeshare.com/gbfs/en/station_information.json")
+station_statusDF <- get_Capital("https://gbfs.capitalbikeshare.com/gbfs/en/station_status.json")
+station_BigData <- station_DataDF %>%
+  left_join(station_statusDF, by = "station_id")
+#define get closest for mapping
 get_closest <- function(location){
-  library(rgeos) #load packages
   location <- geocode(location, output = c("latlon"), source = "google")
   set1sp <- SpatialPoints(location) #define location points
   station_sub <- station_BigData[, 6:5]#subset for lon lat
@@ -107,18 +116,6 @@ get_closest <- function(location){
     select(name, lat, lon)
   return(dock)
 }
-get_Capital <- function(url) {
-  doot <- fromJSON(url)
-  doot2 <- doot$data
-  doot3 <- do.call(what = "rbind",
-                   args = lapply(doot2, as.data.frame))
-  return(doot3)
-}
-station_DataDF <- get_Capital("https://gbfs.capitalbikeshare.com/gbfs/en/station_information.json")
-station_statusDF <- get_Capital("https://gbfs.capitalbikeshare.com/gbfs/en/station_status.json")
-station_BigData <- station_DataDF %>%
-  left_join(station_statusDF, by = "station_id")
-
 # Define UI for application that draws a histogram
 
 ui <-  fluidPage(
@@ -181,8 +178,8 @@ server <- function(input, output) {
                                   '\n Available Bikes: ', num_bikes_available,
                                   '\n Available Docks: ', num_docks_available)) %>%
         layout(mapbox = list(zoom = 14,
-                             center = list(lat = ~median(get_closest(input$current)$lat),
-                                           lon = ~median(get_closest(input$current)$lon)),
+                             center = list(lat = ~(get_closest(input$current)$lat),
+                                           lon = ~(get_closest(input$current)$lon)),
                              style = "streets")) %>%
         add_text(data = get_closest(input$current), x = ~ lon, y = ~ lat+.0006, text = "Our Suggestion!")
     })
@@ -263,22 +260,13 @@ server <- function(input, output) {
     })
     shinyjs::hide("button")     
     shinyjs::show("button2") 
-    
-    
-    
-    
   })#end of observe for button
   
   observeEvent(input$button2, {  
     
     output$choice <- renderText(input$chosen_place)
-    
-    
   })
   
 }  
-
 # Run the application 
 if (interactive()){shinyApp(ui = ui, server = server)}
-
-

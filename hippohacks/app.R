@@ -1,6 +1,7 @@
 #call relevant packages
 library(shiny)
 library(shinydashboard)
+library(plotly)
 
 #define the ui
 header <- dashboardHeader()

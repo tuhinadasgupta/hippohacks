@@ -6,7 +6,6 @@
 #
 #    http://shiny.rstudio.com/
 #
-
 library(shiny)
 library(plotly)
 library(rgeos)
@@ -19,7 +18,6 @@ Sys.setenv('MAPBOX_TOKEN' = 'pk.eyJ1IjoibWFzdGVyYmluZ28xIiwiYSI6ImNqdDluOHo2aDAx
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-    shinythemes::themeSelector(),
     # Application title
     titlePanel("Tour de DC"),
 
@@ -78,8 +76,8 @@ server <- function(input, output) {
                                       '\n Available Bikes: ', num_bikes_available,
                                       '\n Available Docks: ', num_docks_available)) %>%
             layout(mapbox = list(zoom = 14,
-                                 center = list(lat = ~median(get_closest(input$location)$lat),
-                                               lon = ~median(get_closest(input$location)$lon)),
+                                 center = list(lat = ~(get_closest(input$location)$lat),
+                                               lon = ~(get_closest(input$location)$lon)),
                                  style = "streets")) %>%
             add_text(data = get_closest(input$location), x = ~ lon, y = ~ lat+.0006, text = "Our Suggestion!")
     })

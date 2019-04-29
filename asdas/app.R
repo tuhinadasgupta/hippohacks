@@ -14,7 +14,6 @@ library(jsonlite)
 library(dplyr)
 library(ggmap)
 library(sp)
-Sys.setenv('MAPBOX_TOKEN' = 'pk.eyJ1IjoibWFzdGVyYmluZ28xIiwiYSI6ImNqdDluOHo2aDAxenQ0OW51dmdkOGIyaDkifQ.KMv1Wkds1VtmtzOOmMWuiw')
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(

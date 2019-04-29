@@ -10,9 +10,7 @@ library(ggplot2)
 library(sp)
 library(rgeos) #for the revised google places functions
 #register google API key
-register_google(key="AIzaSyA-YsYmgsuegnG9ZWonhssUq-aQdBr8MHo")
 #MAPBOX token
-Sys.setenv('MAPBOX_TOKEN' = 'pk.eyJ1IjoibWFzdGVyYmluZ28xIiwiYSI6ImNqdDluOHo2aDAxenQ0OW51dmdkOGIyaDkifQ.KMv1Wkds1VtmtzOOmMWuiw')
 #revised places function
 get_poiVER2 <- function(location, radius, type, return_n) {
   key <- "AIzaSyDitfa2CtI_rpIbpJviZRey63D0m7N3ZMA" #set api key for google places

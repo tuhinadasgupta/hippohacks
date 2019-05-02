@@ -1,0 +1,13 @@
+name: Tour_de_DC
+title: Tour_de_DC
+username:
+account: bingo-lahaye
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 896936
+bundleId: 2045898
+url: https://bingo-lahaye.shinyapps.io/Tour_de_DC/
+when: 1556513715.19078
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: app.pdf|hippohacks.Rmd|README.md|hipp/app.R|hippohacks/app.R|hippohacks/gmapsteps.r

@@ -28,7 +28,7 @@ walking <- route(from = input$current, to = get_closest(input$current),
 biking <- route(from = input$current, to = get_closest(input$current), 
                       mode = "bicycling", structure = "route", output = "simple")
 #test ver
-route1 <- route(from = "Lincoln Memorial", to = "3230 7th Street Ne", 
+route1 <- route(from = "Lincoln Memorial", to = "3230 7th Street NE", 
       mode = "walking", structure = "route", output = "simple")
 qmap(location = "Washington, DC", zoom = 13) +
   geom_path(data = route1, aes(x = lon, y = lat), 

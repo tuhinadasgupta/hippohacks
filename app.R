@@ -6,10 +6,11 @@ library(googleway)
 library(plotly)
 library(dplyr)
 library(ggmap)
-library(ggplot2)
 library(sp)
-library(rgeos) #for the revised google places functions
+library(ggplot2)
+library(rgeos)
 #register google API key
+Sys.setenv('MAPBOX_TOKEN' = 'pk.eyJ1IjoibWFzdGVyYmluZ28xIiwiYSI6ImNqdDluOHo2aDAxenQ0OW51dmdkOGIyaDkifQ.KMv1Wkds1VtmtzOOmMWuiw')
 #MAPBOX token
 #revised places function
 get_poiVER2 <- function(location, radius, type, return_n) {
@@ -40,7 +41,7 @@ get_Capital <- function(url) {
 
 ui <-  fluidPage(
   shinyjs::useShinyjs(),
-  
+  theme = shinythemes::shinytheme("superhero"),
   # Application title
   titlePanel("Tour de DC"),
   
@@ -63,9 +64,13 @@ ui <-  fluidPage(
     # Show a plot of the generated distribution
     mainPanel(
       tabsetPanel(
-        tabPanel("Starting Point",plotlyOutput("distPlot"), tableOutput("rating")),
+        tabPanel("Starting Point",plotlyOutput("distPlot"), h1("Introduction"), 
+                 "Welcome to Tour de DC. To Start please input any address in the DMV and select what you are interested in.
+                 It will then populate a small list for you to choose which points of interest you want to go on preference, as well
+                 as give you your closest bike share location. Choose a location and go to the second tab where the map will show the route to
+                 the closest bike share to your chosen location. This app is still under development, but I hope you enjoy!"),
         tabPanel("End Point", plotlyOutput("endGraph")),
-        tabPanel("Route")
+        tabPanel("Route", "Currently in development, check back later!")
       )
     )
   )
@@ -95,10 +100,10 @@ server <- function(input, output) {
         select(name, lat, lon)
       return(dock)
     }
-    #route to the bike rqack
+    #route to the bike rack
     current_loc <- get_closest(input$current)
     revised_loc <- revgeocode(c(current_loc$lon, current_loc$lat))
-    walking <- route(from = input$current, to = revised_loc, mode = "walking",structure = "route", output = "simple")
+    walking <- route(from = input$current, to = revised_loc, mode = "walking", structure = "route", output = "simple")
     output$distPlot <- renderPlotly({
       plot_mapbox(mode = "scattermapbox" #hoverlabel = list(
         #bgcolor = "green", bordercolor = "white"
